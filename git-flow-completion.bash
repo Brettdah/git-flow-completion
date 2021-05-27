@@ -3,7 +3,7 @@
 # git-flow-completion
 # ===================
 #
-# Bash completion support for [git-flow](http://github.com/nvie/gitflow)
+# Bash completion support for [git-flow (AVH Edition)](http://github.com/petervanderdoes/gitflow)
 #
 # The contained completion routines provide support for completing:
 #
