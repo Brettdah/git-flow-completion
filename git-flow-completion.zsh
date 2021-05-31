@@ -44,6 +44,7 @@ _git-flow ()
 			subcommands=(
 				'init:Initialize a new git repo with support for the branching model.'
 				'feature:Manage your feature branches.'
+				'bugfix:Manage your bugfix branches'
 				'release:Manage your release branches.'
 				'hotfix:Manage your hotfix branches.'
 				'support:Manage your support branches.'
@@ -73,6 +74,9 @@ _git-flow ()
 
 					(feature)
 						__git-flow-feature
+					;;
+					(bugfix)
+						__git-flow-bugfix
 					;;
 			esac
 		;;
@@ -281,6 +285,130 @@ __git-flow-feature ()
 	esac
 }
 
+__git-flow-bugfix () {
+	local curcontext="$curcontext" state line
+	typeset -A opt_args
+
+	_arguments -C \
+		':command:->command' \
+		'*::options:->options'
+
+	case $state in
+		(command)
+
+			local -a subcommands
+			subcommands=(
+				'list:List bugfix branches'
+				'start:Start a new bugfix branch'
+				'finish:Finish a bugfix branch'
+				'publish:Publish a bugfix branch'
+				'track:Track a remote bugfix branch'
+				'diff:Show all changes'
+				'rebase:Perform a rebase'
+				'checkout:Checkout a bugfix branch'
+				'pull:Pull a bugfix branch'
+				'delete:Delete a bugfix branch'
+				'rename:Rename a bugfix branch'
+			)
+			_describe -t commands 'git flow bugfix' subcommands
+			_arguments \
+				-v'[Verbose (more) output]' \
+				-h'[Show help]'
+		;;
+
+	(options)
+		case $line[1] in
+
+			(start)
+				_arguments -s \
+					'(-h --help)'{-h,--help}'[Show help]' \
+					'(-F --fetch)'{-f,--fetch}'[Fetch from origin first]' \
+					--showcommands'[Show git commands while executing them]' \
+					':bugfix:__git_flow_bugfix_list' \
+					':branch-name:__git_branch_names'
+			;;
+
+			(finish)
+				_arguments -s \
+					'(-h --help)'{-h,--help}'[Show help]' \
+					'(-f --fetch)'{-F,--fetch}'[Fetch from origin before performing finish]' \
+					'(-r --rebase)'{-r,--rebase}'[Rebase instead of merge]' \
+					'(-p --preserve-merges)'{-p,--preserve-merges}'[Preserve merges while rebasing]' \
+					'(-k --keep)'{-k,--keep}'[Keep branch after performing finish]' \
+					'(-D --force_delete)'{-D,--force_delete}'[Force delete bugfix branch after finish]' \
+					'(-S --squash)'{-S,--squash}'[Squash bugfix during merge]' \
+					--showcommands'[Show git commands while executing them]' \
+					--keepremote'[Keep the remote branch]' \
+					--keeplocal'[Keep the local branch]' \
+					--no-ff'[Never fast-forward during merge]' \
+					':bugfix:__git_flow_bugfix_list'
+			;;	
+
+			(publish)
+				_arguments -s \
+					'(-h --help)'{-h,--help}'[Show help]' \
+					--showcommands'[Show git commands while executing them]' \
+					':bugfix:__git_flow_bugfix_list'
+			;;
+
+			(track)
+				_arguments -s \
+					'(-h --help)'{-h,--help}'[Show help]' \
+					--showcommands'[Show git commands while executing them]' \
+					':bugfix:__git_flow_bugfix_list'
+			;;
+
+			(diff)
+				_arguments -s \
+					'(-h --help)'{-h,--help}'[Show help]' \
+					--showcommands'[Show git commands while executing them]' \
+					':branch:__git_branch_names'
+			;;
+
+			(rebase)
+				_arguments -s \
+					'(-h --help)'{-h,--help}'[Show help]' \
+					'(-i --interactive)'{-i,--interactive}'[Do an interactive rebase]' \
+					'(-p --preserve-merges)'{-p,--preserve-merges}'[Preserve merges]' \
+					--showcommands'[Show git commands while executing them]' \
+					':branch:__git_branch_names'
+			;;
+
+			(checkout)
+				_arguments -s \
+					'(-h --help)'{-h,--help}'[Show help]' \
+					--showcommands'[Show git commands while executing them]' \
+					':bugfix:__git_flow_bugfix_list'
+			;;
+
+			(pull)
+				_arguments -s \
+					'(-h --help)'{-h,--help}'[Show help]' \
+					--showcommands'[Show git commands while executing them]' \
+					':bugfix:__git_remotes' \
+					':branch:__git_branch_names'
+			;;
+
+			(delete)
+				_arguments -s \
+					'(-h --help)'{-h,--help}'[Show help]' \
+					'(-f --force)'{-f,--force}'[Force deletion]' \
+					'(-r --remote)'{-r,--remote}'[Delete remote branch]' \
+					--showcommands'[Show git commands while executing them]' \
+					':bugfix:__git_flow_bugfix_list'
+			;;
+
+			(rename)
+				_arguments -s \
+					'(-h --help)'{-h,--help}'[Show help]' \
+					--showcommands'[Show git commands while executing them]' \
+					':bugfix:__git_flow_bugfix_list'
+			;;
+	esac
+	;;
+esac
+}
+
 __git_flow_version_list ()
 {
 	local expl
@@ -301,6 +429,16 @@ __git_flow_feature_list ()
 	__git_command_successful || return
 
 	_wanted features expl 'feature' compadd $features
+}
+
+__git_flow_bugfix_list () {
+	local expl
+	declare -a bugfixes
+
+	bugfixes=(${${(f)"$(_call_program bugfixes git flow bugfix list 2> /dev/null | tr -d ' |*')"}})
+	__git_command_successful || return
+
+	_wanted bugfixes expl 'bugfix' compadd $bugfixes
 }
 
 __git_remotes () {
