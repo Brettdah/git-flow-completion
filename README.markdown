@@ -1,7 +1,7 @@
 git-flow-completion
 ===================
 
-Bash, Zsh and fish completion support for [git-flow](http://github.com/nvie/gitflow).
+Bash, Zsh and fish completion support for [git-flow (AVH Edition)](http://github.com/petervanderdoes/gitflow).
 
 The contained completion routines provide support for completing:
 
@@ -62,7 +62,7 @@ To achieve git-flow completion nirvana:
  
          1. Install the plugin by cloning this repository to your directory for [custom oh-my-zsh plugins](https://github.com/robbyrussell/oh-my-zsh#customization):
          
-         `git clone https://github.com/bobthecow/git-flow-completion ~/.oh-my-zsh/custom/plugins/git-flow-completion`
+         `git clone https://github.com/wizard-28/git-flow-completion ~/.oh-my-zsh/custom/plugins/git-flow-completion`
          
          After doing that, your file tree ought to look like this:
          
