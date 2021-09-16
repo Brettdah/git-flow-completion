@@ -487,4 +487,6 @@ __git_command_successful () {
 	return 0
 }
 
-zstyle ':completion:*:*:git:*' user-commands flow:'provide high-level repository operations'
+zstyle -g existing_user_commands ':completion:*:*:git:*' user-commands
+
+zstyle ':completion:*:*:git:*' user-commands $existing_user_commands flow:'provide high-level repository operations'
